@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+    <meta charset="utf-8" />
+    <title>Teller!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="initial-scale=1, viewport-fit=cover" />
+
+    <link rel="icon" href="teller-180x180.png">
+    <link rel="apple-touch-icon" href="teller-180x180.png">
+
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="lib/toastify.min.css" defer>
+    
+    <link rel="stylesheet" href="all.min.css" defer>
+</head>
+<body class="desktop">
+    <div id="app_root">
+        <div id="game_index"></div>
+        <div id="game_menu"></div>
+        <div id="game_story"></div>
+        <div id="game_editor"></div>
+    </div>
+
+    <script id="import_main" type="text/javascript">
+        APP = {}
+        APP.roots = []
+        APP.admin = false
+    </script>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "marked": "./lib/marked.esm.js"
+            }
+        }
+    </script>
+
+    <script src="lib/morphdom-umd.js"></script>
+    <script src='lib/fastclick.js'></script>
+    <script src="lib/toastify.min.js" defer></script>
+    <script type="module" src="./js/index.js"></script>
+</body>
+</html>
