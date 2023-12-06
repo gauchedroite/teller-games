@@ -1,2 +1,3 @@
-export const NS = "GCHRISTIAN";
-console.log("Christian");
+import { NS } from "./christian2.js";
+console.log(`Christian + ${NS}`);
+console.log("YO");
