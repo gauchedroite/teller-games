@@ -1,4 +1,6 @@
 import * as App from "./core/app.js";
+console.log(App.NS)
+/*
 import * as router from "./core/router.js";
 //
 import * as GameMain from "./game/main.js";
@@ -141,3 +143,4 @@ window.addEventListener("hashchange", () => {
         runner === null || runner === void 0 ? void 0 : runner.pause();
 });
 //# sourceMappingURL=index.js.map
+*/
