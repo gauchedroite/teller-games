@@ -38,7 +38,6 @@ export const postRender = () => {
 
 console.log("App.NS = " + App.NS)
 
-/*
 // Initialize the app
 await App.initialize(() => {
     return `
@@ -145,4 +144,3 @@ window.addEventListener("hashchange", () => {
         runner === null || runner === void 0 ? void 0 : runner.pause();
 });
 //# sourceMappingURL=index.js.map
-*/
