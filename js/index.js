@@ -37,6 +37,7 @@ export const postRender = () => {
 };
 
 console.log("App.NS = " + App.NS)
+return
 
 // Initialize the app
 await App.initialize(() => {
