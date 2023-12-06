@@ -8,9 +8,6 @@ export const NS = "GINDEX";
 FastClick.attach(document.body);
 // Global reference to the app. Used for some event handlers.
 window[App.NS] = App;
-
-console.log("App.NS = " + App.NS)
-/*
 // Animation support
 let runner = undefined;
 const fetch = (args) => {
@@ -38,6 +35,10 @@ export const postRender = () => {
         }, 0);
     }
 };
+
+console.log("App.NS = " + App.NS)
+
+/*
 // Initialize the app
 await App.initialize(() => {
     return `
