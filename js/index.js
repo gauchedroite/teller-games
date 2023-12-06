@@ -1,6 +1,4 @@
 import * as App from "./core/app.js";
-console.log(App.NS)
-/*
 import * as router from "./core/router.js";
 //
 import * as GameMain from "./game/main.js";
@@ -10,6 +8,9 @@ export const NS = "GINDEX";
 FastClick.attach(document.body);
 // Global reference to the app. Used for some event handlers.
 window[App.NS] = App;
+
+console.log("App.NS = " + App.NS)
+/*
 // Animation support
 let runner = undefined;
 const fetch = (args) => {
