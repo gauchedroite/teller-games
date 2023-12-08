@@ -27,9 +27,6 @@ export default class GameData extends UserData {
                 moments: this.moments
             });
         };
-        //
-        // situations
-        //
         this.addSituation = () => {
             var id = -1;
             var sits = this.situations;
@@ -41,26 +38,21 @@ export default class GameData extends UserData {
             var sit = { id: id, name: "", when: "", text: "", sids: [], aids: [], aid: -1 };
             sits.push(sit);
             this.situations = sits;
-            //
             var aid = this.addActor(id, AKind.Player);
             this.saveSituationPlayerId(aid, id);
-            //
             return id;
         };
         this.deleteSituation = (id) => {
             var sits = this.situations;
             var index = this.getSituationIndex(sits, id);
             var sit = sits[index];
-            //
             for (var sid of sit.sids) {
                 this.deleteScene(sid);
             }
-            //
             this.deleteActor(sit.aid);
             for (var aid of sit.aids) {
                 this.deleteActor(aid);
             }
-            //
             sits.splice(index, 1);
             this.situations = sits;
         };
@@ -102,9 +94,6 @@ export default class GameData extends UserData {
         this.getSituationOfMessageTo = (sits, msg) => {
             var aid = msg.parentid;
         };
-        //
-        // scenes
-        //
         this.addScene = (sitid) => {
             var id = -1;
             var scns = this.scenes;
@@ -116,7 +105,6 @@ export default class GameData extends UserData {
             var scn = { id: id, sitid: sitid, name: "", text: "", mids: [] };
             scns.push(scn);
             this.scenes = scns;
-            //
             var sits = this.situations;
             var sit = this.getSituation(sits, sitid);
             sit.sids.push(id);
@@ -127,14 +115,11 @@ export default class GameData extends UserData {
             var scns = this.scenes;
             var index = this.getSceneIndex(scns, id);
             var scn = scns[index];
-            //
             for (var mid of scn.mids) {
                 this.deleteSceneMoment(mid);
             }
-            //
             scns.splice(index, 1);
             this.scenes = scns;
-            //
             var sits = this.situations;
             for (var sit of sits) {
                 for (var i = 0; i < sit.sids.length; i++) {
@@ -181,9 +166,6 @@ export default class GameData extends UserData {
             }
             return scns;
         };
-        //
-        // actors
-        //
         this.addActor = (sitid, akind) => {
             var id = -1;
             var acts = this.actors;
@@ -196,7 +178,6 @@ export default class GameData extends UserData {
             var act = { id: id, sitid: sitid, kind: kind, name: "", text: "", mids: [] };
             acts.push(act);
             this.actors = acts;
-            //
             var sits = this.situations;
             var sit = this.getSituation(sits, sitid);
             sit.aids.push(id);
@@ -209,14 +190,11 @@ export default class GameData extends UserData {
             var acts = this.actors;
             var index = this.getActorIndex(acts, id);
             var act = acts[index];
-            //
             for (var mid of act.mids) {
                 this.deleteActorMoment(mid);
             }
-            //
             acts.splice(index, 1);
             this.actors = acts;
-            //
             var sits = this.situations;
             for (var sit of sits) {
                 for (var i = 0; i < sit.aids.length; i++) {
@@ -263,9 +241,6 @@ export default class GameData extends UserData {
             }
             return acts;
         };
-        //
-        // moments
-        //
         this.addMoment = (scnid) => {
             var id = -1;
             var moms = this.moments;
@@ -277,7 +252,6 @@ export default class GameData extends UserData {
             var mom = { kind: Kind.Moment, id: id, parentid: scnid, when: "", text: "" };
             moms.push(mom);
             this.moments = moms;
-            //
             var scns = this.scenes;
             var scn = this.getScene(scns, scnid);
             scn.mids.push(id);
@@ -288,10 +262,8 @@ export default class GameData extends UserData {
             var moms = this.moments;
             var index = this.getMomentIndex(moms, id);
             var mom = moms[index];
-            //
             moms.splice(index, 1);
             this.moments = moms;
-            //
             var scns = this.scenes;
             for (var scn of scns) {
                 for (var i = 0; i < scn.mids.length; i++) {
@@ -307,10 +279,8 @@ export default class GameData extends UserData {
             var moms = this.moments;
             var index = this.getMomentIndex(moms, id);
             var mom = moms[index];
-            //
             moms.splice(index, 1);
             this.moments = moms;
-            //
             var acts = this.actors;
             for (var act of acts) {
                 for (var i = 0; i < act.mids.length; i++) {
@@ -357,9 +327,6 @@ export default class GameData extends UserData {
             }
             return moms;
         };
-        //
-        // actions
-        //
         this.addAction = (scnid) => {
             var id = -1;
             var moms = this.moments;
@@ -371,7 +338,6 @@ export default class GameData extends UserData {
             var act = { kind: Kind.Action, id: id, parentid: scnid, when: "", text: "", name: "" };
             moms.push(act);
             this.moments = moms;
-            //
             var scns = this.scenes;
             var scn = this.getScene(scns, scnid);
             scn.mids.push(id);
@@ -409,9 +375,6 @@ export default class GameData extends UserData {
             }
             return moms;
         };
-        //
-        // messages TO
-        //
         this.addMessageTo = (actid) => {
             var id = -1;
             var moms = this.moments;
@@ -423,7 +386,6 @@ export default class GameData extends UserData {
             var msg = { kind: Kind.MessageTo, id: id, parentid: actid, when: "", text: "", name: "", to: -1 };
             moms.push(msg);
             this.moments = moms;
-            //
             var acts = this.actors;
             var act = this.getActor(acts, actid);
             act.mids.push(id);
@@ -482,9 +444,6 @@ export default class GameData extends UserData {
             }
             return acts;
         };
-        //
-        // messages FROM
-        //
         this.addMessageFrom = (actid) => {
             var id = -1;
             var moms = this.moments;
@@ -496,7 +455,6 @@ export default class GameData extends UserData {
             var msg = { kind: Kind.MessageFrom, id: id, parentid: actid, when: "", text: "" };
             moms.push(msg);
             this.moments = moms;
-            //
             var acts = this.actors;
             var act = this.getActor(acts, actid);
             act.mids.push(id);
@@ -530,4 +488,3 @@ export default class GameData extends UserData {
         };
     }
 }
-//# sourceMappingURL=game-data.js.map

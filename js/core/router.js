@@ -89,4 +89,3 @@ const broadcastChange = (hash) => {
 };
 window.addEventListener("hashchange", hashChange);
 window.addEventListener("DOMContentLoaded", hashChange);
-//# sourceMappingURL=router.js.map

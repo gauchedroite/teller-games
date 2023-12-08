@@ -1,4 +1,3 @@
-// @ts-nocheck
 let ESC_MAP = {
     "&": "&amp;",
     "<": "&lt;",
@@ -6,8 +5,8 @@ let ESC_MAP = {
     '"': "&quot;",
     "'": "&#39;"
 };
-let tolerance = 0.00012; //for lat/lng fields
-let serverTimezoneOffset; //minutes
+let tolerance = 0.00012;
+let serverTimezoneOffset;
 const getTimezoneOffset = (timeZone = "UTC") => {
     const date = new Date();
     const utcDate = new Date(date.toLocaleString("en-US", { timeZone: "UTC" }));
@@ -18,8 +17,6 @@ serverTimezoneOffset = getTimezoneOffset(window.APP.timeZone);
 export const reviver = (key, value) => {
     if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(value)) {
         let date = new Date(value);
-        //const hoursDiff = date.getHours() + serverTimezoneOffset / 60;
-        //date.setHours(hoursDiff);
         return date;
     }
     else if (typeof value === "string" && /^\d{2}:\d{2}:\d{2}/.test(value)) {
@@ -35,9 +32,6 @@ export const escapeHTML = (text, forAttribute = true) => {
 export function replacer(key, value) {
     if (this[key] instanceof Date) {
         let date = this[key];
-        //const hoursDiff = date.getHours() - serverTimezoneOffset / 60;
-        //date.setHours(hoursDiff);
-        //return date.toISOString().slice(0, -1);
         return date.toJSON();
     }
     return value;
@@ -95,7 +89,6 @@ export const same = (state1, state2, onlyprops = null) => {
             let value1 = state1[key];
             let value2 = state2[key];
             let isPrimitiveType = false;
-            //console.log(`key=${key} value1=${value1}, value2=${value2}`)
             if (value1 != undefined) {
                 if (typeof value1.getTime === "function") {
                     value1 = value1.getTime();
@@ -378,7 +371,6 @@ export const toStaticMoney = (value) => {
     return formatter.format(value !== null && value !== void 0 ? value : 0);
 };
 export const toStaticDateTime = (date) => {
-    //return (date != undefined ? date.toLocaleString() : "");
     if (date == undefined)
         return "";
     return `${formatYYYYMMDD(date, "-")} ${formatHHMMSS24(date)}`;
@@ -503,7 +495,6 @@ export const isValidCreditCard = (cardnumber, cardname) => {
     let cardno = cardnumber.toString();
     let checksum = 0;
     let one_two = 1;
-    // Check for valid modulus 10
     var calc;
     for (let i = cardno.length - 1; i >= 0; i--) {
         calc = Number(cardno.charAt(i)) * one_two;
@@ -520,13 +511,10 @@ export const isValidCreditCard = (cardnumber, cardname) => {
         }
         ;
     }
-    // If checksum is divisible by 10, it is a valid modulus 10
     if (((_a = card.checksum) !== null && _a !== void 0 ? _a : false) && (checksum % 10 != 0))
         return false;
-    // Validate card prefixes
     if (card.prefixes != undefined && !card.prefixes.reduce((acc, one) => acc || cardno.startsWith(one), false))
         return false;
-    // Validate card lengths
     if (!card.lengths.reduce((acc, one) => acc || cardno.length == one, false))
         return false;
     return true;
@@ -593,4 +581,3 @@ export const formatTitle = (name, summary) => {
         return `${summary === null || summary === void 0 ? void 0 : summary.title}`;
     return `New ${name}`;
 };
-//# sourceMappingURL=misc.js.map

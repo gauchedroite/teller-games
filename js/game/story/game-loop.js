@@ -29,7 +29,7 @@ export class Game {
             this.gdata.options = options;
         };
         this.startNewGameAsync = async () => {
-            this.gdata.history = []; //init the list of showed moments
+            this.gdata.history = [];
             this.gdata.clearContinueData();
             let options = this.gdata.options;
             if (isObjectEmpty(options))
@@ -90,7 +90,7 @@ export class Game {
                         var chunk = this.chunks[this.cix++];
                         let first = this.cix == 1;
                         let notLast = this.cix < this.chunks.length;
-                        let goFast = this.gdata.options.fastStory; // && notLast;
+                        let goFast = this.gdata.options.fastStory;
                         if (goFast) {
                             this.ui.addBlurbFast(chunk);
                             await waitforMsecAsync(50);
@@ -123,7 +123,7 @@ export class Game {
                             delete state.intro;
                             this.gdata.state = state;
                         }
-                        this.currentMoment = this.gdata.getMoment(this.gdata.moments, this.currentMoment.id); //we might have edited the moment
+                        this.currentMoment = this.gdata.getMoment(this.gdata.moments, this.currentMoment.id);
                         this.executeMoment(this.currentMoment);
                         op = Op.BUILD_CHOICES;
                     }
@@ -194,14 +194,12 @@ export class Game {
             if (situation == null)
                 return Array();
             var sids = Array();
-            //
             for (var scene of data.scenes) {
                 if (scene.sitid == situation.id) {
                     sids.push(scene.id);
                 }
             }
             var moments = Array();
-            //
             for (var moment of data.moments) {
                 if (moment.kind == Kind.Moment || moment.kind == Kind.Action) {
                     if (sids.indexOf(moment.parentid) != -1) {
@@ -211,7 +209,6 @@ export class Game {
                     }
                 }
             }
-            //
             return moments;
         };
         this.getAllPossibleMessages = () => {
@@ -227,14 +224,12 @@ export class Game {
             if (situation == null)
                 return Array();
             var aids = Array();
-            //
             for (var actor of data.actors) {
                 if (actor.sitid == situation.id) {
                     aids.push(actor.id);
                 }
             }
             var messages = Array();
-            //
             for (var moment of data.moments) {
                 if (moment.kind == Kind.MessageTo || moment.kind == Kind.MessageFrom) {
                     if (aids.indexOf(moment.parentid) != -1) {
@@ -244,7 +239,6 @@ export class Game {
                     }
                 }
             }
-            //
             return messages;
         };
         this.getAllPossibleEverything = () => {
@@ -339,17 +333,14 @@ export class Game {
             if (when == "")
                 return false;
             let state = this.gdata.state;
-            //
             if (typeof state.intro !== "undefined") {
                 if (when == "intro")
                     return true;
                 return false;
             }
-            // a moment can't be played twice
             var history = this.gdata.history;
             if (history.indexOf(moment.id) != -1)
                 return false;
-            //
             return Game.isValidCondition(state, when);
         };
         this.isValidSituation = (situation) => {
@@ -544,7 +535,7 @@ export class Game {
                                 canRepeat = true;
                             if (flag == "must-leave-scene") {
                                 let scene = this.getSceneOf(moment);
-                                if (scene != undefined /*e.g.message*/)
+                                if (scene != undefined)
                                     this.forbiddenSceneId = scene.id;
                             }
                         }
@@ -556,7 +547,7 @@ export class Game {
                             let pattern = del.trim();
                             if (pattern == "*") {
                                 for (var property in state) {
-                                    if (property.indexOf(".") == -1) //one part names only (not inv.*)
+                                    if (property.indexOf(".") == -1)
                                         delete state[property];
                                 }
                             }
@@ -575,7 +566,7 @@ export class Game {
                     }
                 }
             }
-            if (canRepeat == false && moment.id != -1 /*minigame*/) {
+            if (canRepeat == false && moment.id != -1) {
                 let history = this.gdata.history;
                 history.push(moment.id);
                 this.gdata.history = history;
@@ -681,4 +672,3 @@ Game.parseMetadata = (text) => {
     }
     return metadata;
 };
-//# sourceMappingURL=game-loop.js.map

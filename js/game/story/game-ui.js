@@ -2,7 +2,7 @@ import { ChoiceKind } from "../iui.js";
 import { ChunkKind } from "../igame.js";
 import { waitforMsecAsync, waitforClickAsync, waitforValueAsync, waitforAnyClickAsync } from "../../utils.js";
 import { NS } from "./story.js";
-let UX; // Replaces ${NS} for events
+let UX;
 export class UI {
     myStoryInner() { return document.querySelector(".story-inner"); }
     myModal() { return document.querySelector(".modal"); }
@@ -115,7 +115,6 @@ export class UI {
             content.style.pointerEvents = "auto";
             document.body.style.setProperty("--story-panel-offset", "0px");
             this.setCssVariable("--story-panel-offset", "0px");
-            // make sure the first blurb will be visible
             var storyInner = this.myStoryInner();
             storyInner.scrollTop = content.offsetTop;
             var text = this.myContentInner();
@@ -376,7 +375,7 @@ export class UI {
             back.style.opacity = "1";
             front.style.opacity = "0";
             document.body.classList.remove("change-bg");
-            await waitforMsecAsync(500); //do not use "transitionend" here as it was failing on me. hardcode the delay instead
+            await waitforMsecAsync(500);
             back.style.zIndex = "1";
             front.style.zIndex = "0";
         };
@@ -504,10 +503,8 @@ export class UI {
             return `repos/game-${this.id}/${this.sanitize(assetName)}`;
         };
         this.setCssVariable = (property, value) => {
-            //(document.querySelector(":root") as HTMLElement).style.setProperty(property, value)
             document.body.style.setProperty(property, value);
         };
         UX = `${NS}.ux`;
     }
 }
-//# sourceMappingURL=game-ui.js.map

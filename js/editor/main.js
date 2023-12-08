@@ -12,4 +12,3 @@ export const render = () => {
 export const postRender = () => {
     editor.postRender();
 };
-//# sourceMappingURL=main.js.map

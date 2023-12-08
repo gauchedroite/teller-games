@@ -62,13 +62,11 @@ const addGameCss = (id) => {
     const cssElement = document.getElementById(cssid);
     if (cssElement != undefined)
         return;
-    // Remove existing game specific css
     const tags = document.querySelectorAll("[tag=gamecss]");
     for (let ix = tags.length - 1; ix >= 0; ix--) {
         const tag = tags[ix];
         (_a = tag.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(tag);
     }
-    // Add game specific css
     const link = document.createElement("link");
     link.id = cssid;
     link.href = (id != "dev" ? `repos/game-${id}/css/index.css` : `repos_game-dev/css/index.css`);
@@ -105,4 +103,3 @@ export const restartgame = () => {
     showModal = false;
     router.goto(`#/story/${gameid}/restart`, 1);
 };
-//# sourceMappingURL=menu.js.map

@@ -33,16 +33,13 @@ export const fetch = async (args) => {
             game === null || game === void 0 ? void 0 : game.clearAllGameData();
             storyStarted = false;
             router.goto(`#/story/${name}`, 1);
-            router.reload(10); // this makes sure to "release" any pending wait for click in the previous game instance
+            router.reload(10);
             return;
         }
         else {
             await fetchState(name);
         }
     }
-    // We only render/postRender the first time we fetch
-    // After it's started, methods in the UI class mutate the DOM and so calling render() would destroy the DOM state
-    // After the story is started, we still need to set the body id because of the CSS (that would usually be done in App.render())
     if (!storyStarted) {
         App.render();
     }
@@ -65,4 +62,3 @@ export const postRender = () => {
 };
 const bc2 = new BroadcastChannel("editor2");
 bc2.onmessage = event => setTimeout(() => { router.reload(); }, 0);
-//# sourceMappingURL=story.js.map

@@ -6,18 +6,14 @@ export const NS = "App";
 let context = "---";
 let api = "";
 let name;
-//
 let title = "";
 let error = { hasError: false };
-//
 export let uiServerVersion;
-//
 let pageRender;
 let pagePostRender;
 let rendering = false;
 let hardRender = false;
 let renderRoot = "app_root";
-//
 export let state;
 let root = new rootMan(window.APP.roots);
 export const initialize = (render, postRender, appName) => {
@@ -25,18 +21,14 @@ export const initialize = (render, postRender, appName) => {
     pagePostRender = postRender;
     name = appName;
     state = {};
-    return Promise.resolve();
 };
 export const render = () => {
     if (!rendering) {
         rendering = true;
-        //
         let hasServerError = (serverError() ? "js-server-error" : "");
         let hasFatalError = (fatalError() ? "js-fatal-error" : "");
-        //
         let html = pageRender();
         let element = document.getElementById(renderRoot);
-        //let markup = `<div id="${renderRoot}" class="js-fadein ${hasServerError} ${hasFatalError}">${html}</div>`;
         let markup = `<div id="${renderRoot}">${html}</div>`;
         if (!hardRender)
             (window.morphdom)(element, markup, {
@@ -65,7 +57,6 @@ export const render = () => {
             element.outerHTML = markup;
         pagePostRender();
         postRender();
-        //
         rendering = false;
         hardRender = false;
     }
@@ -128,13 +119,11 @@ const setRenderRoot = (id) => {
     renderRoot = id;
     let pages = [...document.querySelectorAll("#app_root > div")];
     pages.forEach(page => {
-        //page.style.opacity = "0";
         page.style.display = "none";
     });
     setTimeout(() => {
         let element = document.getElementById(id);
         element.style.display = "block";
-        //element.style.opacity = "1";
     }, 250);
 };
 export const transitionUI = () => {
@@ -164,7 +153,7 @@ export const inContext = (ns) => {
 export const setError = (text) => {
     error.hasError = true;
     error.messages.push(text);
-    return false; // isValid
+    return false;
 };
 export const getErrorMessages = () => {
     if (hasNoError())
@@ -203,22 +192,22 @@ export const url = (resource) => {
 const handleFetch = (response) => {
     uiServerVersion = response.headers.get("ui-version");
     if (!response.ok) {
-        if (response.status == 304 /*Not Modified*/) {
+        if (response.status == 304) {
             return null;
         }
-        else if (response.status == 401 /*Unauthorized (authentication error really - requires user to signin)*/) {
+        else if (response.status == 401) {
             error.hasError = true;
             error.messages = ["Not authenticated"];
             error.status = response.status;
             throw error;
         }
-        else if (response.status == 403 /*Forbidden (authorization error really)*/) {
+        else if (response.status == 403) {
             error.hasError = true;
             error.messages = ["Not authorized"];
             error.status = response.status;
             throw error;
         }
-        else if (response.status != 500 /*500 is used for validation error - and it's handled later when json content is available*/) {
+        else if (response.status != 500) {
             error.hasError = true;
             error.messages = [response.statusText];
             error.status = response.status;
@@ -226,7 +215,7 @@ const handleFetch = (response) => {
         }
     }
     else {
-        if (response.status == 204 /*No Content*/) {
+        if (response.status == 204) {
             return null;
         }
     }
@@ -239,10 +228,10 @@ const parseJson = (response) => {
         .text()
         .then(text => {
         var json = JSON.parse(text, reviver);
-        if (json.hasError /*Error returned by the api exception handler*/) {
+        if (json.hasError) {
             error.hasError = true;
             error.messages = [json.message];
-            error.status = 500; /*500 is used for validation error*/
+            error.status = 500;
             throw error;
         }
         return json;
@@ -250,21 +239,19 @@ const parseJson = (response) => {
 };
 const catchFetch = (reason) => {
     if (reason.hasError != undefined) {
-        //All errors except network failures
         error.hasError = reason.hasError;
         error.messages = reason.messages;
         error.status = reason.status;
-        if (error.status == 401 /*Unauthorized (not authenticated or expired)*/) {
+        if (error.status == 401) {
         }
-        if (error.status == 404 /*Not Found (IIS stopped)*/) {
+        if (error.status == 404) {
             root.bump();
         }
-        if (error.status == 503 /*Service Not Available (AppPool stopped)*/) {
+        if (error.status == 503) {
             root.bump();
         }
     }
     else {
-        //"Failed to fetch": Network failures or api server is not responding
         error.hasError = true;
         error.messages = [reason.message];
         error.status = -404;
@@ -454,4 +441,3 @@ export const setPageState = (ns, key, value) => {
     localStorage.setItem(id, JSON.stringify(pageState));
     return value;
 };
-//# sourceMappingURL=app.js.map

@@ -59,18 +59,15 @@
     </style>
 </head>
 <body>
-    <video autoplay loop name="media" class="solid">
+    <audio id="menu_audio" loop name="media" class="solid">
         <source src="./assets/choco-birds-run.mp3" type="audio/mpeg">
-    </video>
+    </audio>
     <canvas id="menu_canvas" class="solid"></canvas>
     <div id="menu_title">
         Mon ami<br>
         <div class="wiggled"><span class="sparkle">B</span>illy</div>
     </div>
     <img id="menu_img" class="solid" src="assets/menu-billy.png" alt="">
-    <!--<div id="menu_button" style="right: 0;" class="solid">
-        <button onclick="snipped()">SNIP!</button>
-    </div>-->
 
     <script id="vertex_shader" type="x-shader/x-vertex">
         attribute vec3 a_square;
@@ -252,35 +249,15 @@
         }, 0);
 
         // Pause the shader if it's not visible
+        // Start audio at beginning of the game
         const bc = new BroadcastChannel("route-change")
         bc.onmessage = event => {
             if (event.data.current.startsWith("#/menu"))
                 runner?.resume()
-            else
+            else {
                 runner?.pause()
-        }
-    </script>
-
-    <script>
-        const snipped = () => {
-            runner.pause()
-
-            const canvas = document.getElementById("menu_canvas")
-            canvas.toBlob(blob => {
-                const img = document.createElement("img")
-                const url = URL.createObjectURL(blob)
-                
-                img.onload = () => { 
-                    URL.revokeObjectURL(url)
-
-                    document.getElementById("menu_canvas").remove()
-                    document.getElementById("menu_img").remove()
-                    document.getElementById("menu_button").remove()
-
-                    document.body.appendChild(img)
-                }
-                img.src = url
-            })
+                document.getElementById("menu_audio")?.play()
+            }
         }
     </script>
 </body>

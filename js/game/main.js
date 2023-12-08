@@ -17,4 +17,3 @@ export const postRender = () => {
     menu.postRender();
     story.postRender();
 };
-//# sourceMappingURL=main.js.map

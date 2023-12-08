@@ -34,4 +34,3 @@ GameHelper.getWhens = (text) => {
     return whens;
 };
 export default GameHelper;
-//# sourceMappingURL=game-helper.js.map

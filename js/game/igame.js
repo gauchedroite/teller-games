@@ -24,4 +24,3 @@ export var OpAction;
     OpAction[OpAction["GAME_START"] = 1] = "GAME_START";
     OpAction[OpAction["SHOWING_MOMENT"] = 2] = "SHOWING_MOMENT";
 })(OpAction || (OpAction = {}));
-//# sourceMappingURL=igame.js.map

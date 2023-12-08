@@ -58,7 +58,6 @@ export function isObjectEmpty(objectName) {
 }
 export function deepFreeze(object) {
     const propNames = Reflect.ownKeys(object);
-    // Freeze properties before freezing self
     for (const name of propNames) {
         const value = object[name];
         if ((value && typeof value === "object") || typeof value === "function") {
@@ -67,4 +66,3 @@ export function deepFreeze(object) {
     }
     return Object.freeze(object);
 }
-//# sourceMappingURL=utils.js.map

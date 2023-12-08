@@ -5,4 +5,3 @@ export var ChoiceKind;
     ChoiceKind[ChoiceKind["messageTo"] = 2] = "messageTo";
     ChoiceKind[ChoiceKind["messageFrom"] = 3] = "messageFrom";
 })(ChoiceKind || (ChoiceKind = {}));
-//# sourceMappingURL=iui.js.map

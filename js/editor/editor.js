@@ -442,7 +442,7 @@ const fetchState = async (args) => {
     if (args != undefined && args.length > 0) {
         const id = args[0];
         if (id == "new") {
-            debugger; //TODO
+            debugger;
         }
         else if (gdata == undefined) {
             editor_url = `editor/${id}`;
@@ -593,9 +593,6 @@ const getMomentUrl = (moment) => {
     const kind = (moment.kind == Kind.Moment ? "moment" : "action");
     return `#/${editor_url}/${kind}id=${mid}`;
 };
-//
-// Events
-//
 const bc = new BroadcastChannel("game-loop");
 bc.onmessage = event => {
     if (gdata == undefined)
@@ -638,4 +635,3 @@ export const uploadGame = () => {
         });
     }, 0);
 };
-//# sourceMappingURL=editor.js.map

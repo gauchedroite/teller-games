@@ -10,4 +10,3 @@ export var AKind;
     AKind[AKind["Player"] = 0] = "Player";
     AKind[AKind["NPC"] = 1] = "NPC";
 })(AKind || (AKind = {}));
-//# sourceMappingURL=igame-data.js.map

@@ -1,14 +1,11 @@
 import * as App from "./core/app.js";
 import * as router from "./core/router.js";
-//
 import * as GameMain from "./game/main.js";
 import * as EditorMain from "./editor/main.js";
 import WebglRunner from "./game/webgl-runner.js";
 export const NS = "GINDEX";
 FastClick.attach(document.body);
-// Global reference to the app. Used for some event handlers.
 window[App.NS] = App;
-// Animation support
 let runner = undefined;
 const fetch = (args) => {
     App.prepareRender(NS, "Index", "game_index");
@@ -35,12 +32,7 @@ export const postRender = () => {
         }, 0);
     }
 };
-
-console.log("App.NS = " + App.NS)
-/*
-
-// Initialize the app
-await App.initialize(() => {
+App.initialize(() => {
     return `
         ${GameMain.render()}
         ${EditorMain.render()}
@@ -51,12 +43,9 @@ await App.initialize(() => {
     EditorMain.postRender();
     postRender();
 }, "Teller");
-// Configure routes
 EditorMain.startup();
 GameMain.startup();
-// Add a catchall route
 router.addRoute("^#/?(.*)$", params => fetch(params));
-// Add a portrait/landscape class to the body to match the orientation
 const onresize = () => {
     const portrait = window.innerWidth < window.innerHeight;
     document.body.classList.remove("portrait", "landscape");
@@ -64,7 +53,6 @@ const onresize = () => {
 };
 addEventListener("resize", onresize);
 onresize();
-// Shader
 const vertexShader = () => {
     return `
     attribute vec3 a_square;
@@ -134,7 +122,6 @@ const fragmentShader = () => {
     }
 `;
 };
-// Pause the shader if were not on the index page
 window.addEventListener("hashchange", () => {
     let hash = window.location.hash;
     if (hash.length == 0)
@@ -144,5 +131,3 @@ window.addEventListener("hashchange", () => {
     else
         runner === null || runner === void 0 ? void 0 : runner.pause();
 });
-//# sourceMappingURL=index.js.map
-*/
