@@ -503,4 +503,8 @@
     .js-toast-bad {
         background-color: indianred;
     }
+
+    #refresh_log.is-dirty {
+        background-color: yellow;
+    }
 }

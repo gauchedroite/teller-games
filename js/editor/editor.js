@@ -13,6 +13,8 @@ let possible_moments;
 let choices;
 let gids;
 let modalWhat;
+let logs = [];
+let showGameFrame = true;
 const myInputRow = (id, value, label, ph = null, disabled = false) => {
     return `
     <div class="item-content">
@@ -85,13 +87,24 @@ const layoutCol_Game = () => {
     <div class="content-block-title">
         <div>Game</div>
         <div>
-            <a target="_new" href="#/menu/${gdata.gameid}"><i title="Menu" class="fa-regular fa-bars"></i></a>&nbsp;
-            <a target="_new" href="#/story/${gdata.gameid}"><i title="Game" class="fa-regular fa-gamepad-modern"></i></a>
+            <a href="#/menu/${gdata.gameid}"><i title="Menu" class="fa-regular fa-bars"></i></a>&nbsp;
+            <a href="#/story/${gdata.gameid}"><i title="Game" class="fa-regular fa-gamepad-modern"></i></a>
+${showGameFrame ? `
+            <a href="#" onclick="${NS}.viewGame(false);return false;"><i title="Hide Game" class="fa-regular fa-eye-slash"></i></a>
+` : `
+            <a href="#" onclick="${NS}.viewGame(true);return false;"><i title="Show Game" class="fa-regular fa-eye"></i></a>
+`}
         </div>
     </div>
+${showGameFrame ? `
     <div class="content-block-iframe">
-        <iframe title="Game" src="#/story/${state.game.id}"></iframe>
+    <iframe title="Game" src="#/story/${state.game.id}"></iframe>
     </div>
+` : `
+    <div class="content-block">
+        &nbsp;
+    </div>
+`}
 `;
 };
 const layoutCol_Situations = () => {
@@ -321,6 +334,9 @@ const layoutCol_IDE = () => {
     const nextscenes = (choices !== null && choices !== void 0 ? choices : []).map((one, index) => {
         return `<li class="ted-isnext"><a href="#" onclick="${NS}.onclickChoice(${index});return false">${one.text}</a></li>`;
     });
+    const loglines = logs
+        .filter((one, index) => logs.findIndex(two => (two.id == one.id)) == index)
+        .map(one => `<div style="margin:6px 0;"><div style="font-size:75%;opacity:0.5;line-height:1;">${one.time}</div><div style="line-height:1;">${one.line}</div></div>`);
     return `
 <div class="page page-ide">
     <div class="content-block-title">
@@ -361,6 +377,19 @@ const layoutCol_IDE = () => {
     </div>
     <div class="content-block">
         ${myCheckbox("fastStory", gdata.options.fastStory, "Fast Story")}
+    </div>
+
+    <div class="content-block-title">
+        <div>Log</div>
+        <div>
+        <a href="#" onclick="${NS}.refreshLog();return false;" id="refresh_log"><i title="Refresh Log" class="fa-regular fa-rotate-right"></i></a>
+        <a href="#" onclick="${NS}.clearLog();return false;"><i title="Clear Log" class="fa-regular fa-trash"></i></a>
+        </div>
+    </div>
+    <div id="log_block" class="content-block" style="max-height: 200px; overflow: auto; padding: 0; font-family: monospace">
+        <div style="padding: 10px 15px;">
+            ${loglines.join("")}
+        </div>
     </div>
 </div>
 `;
@@ -449,7 +478,7 @@ const fetchState = async (args) => {
             gdata = new GameData(id);
             const text = await gdata.fetchGameFileAsync();
             if (text != undefined && text.length > 0)
-                gdata.load_Game(text);
+                gdata.parseGameFile(text);
         }
     }
     state = gdata;
@@ -491,6 +520,8 @@ export const render = () => {
 export const postRender = () => {
     if (!App.inContext(NS))
         return;
+    const logElement = document.querySelector("#log_block div");
+    logElement === null || logElement === void 0 ? void 0 : logElement.scrollIntoView(false);
     if (modalWhat == undefined)
         return;
     setTimeout(() => {
@@ -593,9 +624,9 @@ const getMomentUrl = (moment) => {
     const kind = (moment.kind == Kind.Moment ? "moment" : "action");
     return `#/${editor_url}/${kind}id=${mid}`;
 };
-const bc = new BroadcastChannel("game-loop");
-bc.onmessage = event => {
-    if (gdata == undefined)
+const bcgl = new BroadcastChannel("game-loop:");
+bcgl.onmessage = event => {
+    if (gdata == undefined || !App.inContext(NS))
         return;
     setTimeout(() => {
         var _a, _b;
@@ -614,12 +645,23 @@ bc.onmessage = event => {
         }
     }, 0);
 };
+const bclog = new BroadcastChannel("log:");
+bclog.onmessage = event => {
+    var _a;
+    const data = JSON.parse(JSON.stringify(event.data));
+    logs.push(data);
+    (_a = document.getElementById("refresh_log")) === null || _a === void 0 ? void 0 : _a.classList.add("is-dirty");
+};
 export const onclickChoice = (index) => {
-    const channel = new BroadcastChannel("editor");
+    const channel = new BroadcastChannel("editor:select-choice");
     channel.postMessage({ choiceIndex: index });
 };
+export const viewGame = (view) => {
+    showGameFrame = view;
+    App.renderOnNextTick();
+};
 export const refreshGame = () => {
-    const channel = new BroadcastChannel("editor2");
+    const channel = new BroadcastChannel("editor:reload-story");
     channel.postMessage({});
 };
 export const uploadGame = () => {
@@ -634,4 +676,11 @@ export const uploadGame = () => {
             Misc.toastFailure("FAILED to update the game file");
         });
     }, 0);
+};
+export const clearLog = () => {
+    logs = [];
+    App.renderOnNextTick();
+};
+export const refreshLog = () => {
+    App.renderOnNextTick();
 };

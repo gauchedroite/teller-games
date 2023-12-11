@@ -83,7 +83,7 @@ const hashChange = async () => {
     }
 };
 const broadcastChange = (hash) => {
-    const bc = new BroadcastChannel("route-change");
+    const bc = new BroadcastChannel("router:route-change");
     bc.postMessage({ previous: previousRoute, current: hash });
     previousRoute = hash;
 };

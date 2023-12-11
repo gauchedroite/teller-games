@@ -49,10 +49,18 @@ export function emitEvent(name, detail) {
     const event = new CustomEvent(name, { detail });
     document.dispatchEvent(event);
 }
+const bc = new BroadcastChannel("log:");
 export function log(...data) {
-    const timeOnly = new Date().toISOString().substring(11).replace("Z", " --");
-    console.log(timeOnly, ...data);
+    const timeOnly = new Date().toISOString().substring(11).replace("Z", "");
+    console.log(timeOnly, " --", ...data);
+    bc.postMessage({ time: timeOnly, line: data[0], id: performance.now() });
 }
+const logProxy = new BroadcastChannel("log-proxy");
+logProxy.onmessage = event => {
+    const timeOnly = new Date().toISOString().substring(11).replace("Z", "");
+    console.log(timeOnly, " **", event.data);
+    bc.postMessage({ time: timeOnly, line: event.data.line, id: event.data.id, proxy: true });
+};
 export function isObjectEmpty(objectName) {
     return Object.keys(objectName).length === 0;
 }

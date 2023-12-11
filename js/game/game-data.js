@@ -8,7 +8,7 @@ export default class GameData extends UserData {
         this.scenes = [];
         this.actors = [];
         this.moments = [];
-        this.load_Game = (text) => {
+        this.parseGameFile = (text) => {
             var gdata = JSON.parse(text);
             this.game = gdata.game;
             this.situations = gdata.situations;
@@ -18,7 +18,7 @@ export default class GameData extends UserData {
         };
         this.update_Game = (gdata) => {
             const json = JSON.stringify(gdata);
-            this.load_Game(json);
+            this.parseGameFile(json);
             this.persistGame({
                 game: this.game,
                 situations: this.situations,

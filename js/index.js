@@ -53,6 +53,7 @@ const onresize = () => {
 };
 addEventListener("resize", onresize);
 onresize();
+document.addEventListener("touchstart", () => { });
 const vertexShader = () => {
     return `
     attribute vec3 a_square;

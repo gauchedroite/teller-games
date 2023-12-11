@@ -2,7 +2,7 @@ import GameData from "../game-data.js";
 import { Kind } from "../igame-data.js";
 import { ChoiceKind } from "../iui.js";
 import { ChunkKind, Op } from "../igame.js";
-import { isObjectEmpty, waitforMsecAsync } from "../../utils.js";
+import { isObjectEmpty, log, waitforMsecAsync } from "../../utils.js";
 export class Game {
     constructor(id, ui) {
         this.currentMoment = null;
@@ -10,27 +10,25 @@ export class Game {
         this.forbiddenSceneId = null;
         this.chunks = [];
         this.cix = 0;
-        this.startGameAsync = async () => {
+        this.runGameAsync = async () => {
             const text = await this.gdata.fetchGameFileAsync();
-            if (text != undefined && text.length > 0)
-                this.gdata.load_Game(text);
+            if (text == undefined || text.length == 0)
+                return;
+            this.gdata.parseGameFile(text);
             if (this.gdata.state == undefined || isObjectEmpty(this.gdata.state)) {
                 return this.startNewGameAsync();
             }
             else {
-                return this.continueExistingGameAsync();
+                return this.resumeGameAsync();
             }
         };
-        this.resumeGame = () => {
-        };
-        this.clearAllGameData = () => {
+        this.eraseGame = () => {
             var options = this.gdata.options;
             this.gdata.clearStorage();
             this.gdata.options = options;
         };
         this.startNewGameAsync = async () => {
-            this.gdata.history = [];
-            this.gdata.clearContinueData();
+            this.gdata.eraseAllUserStorage();
             let options = this.gdata.options;
             if (isObjectEmpty(options))
                 options = {
@@ -40,26 +38,28 @@ export class Game {
             let state = { intro: true };
             state[this.gdata.game.initialstate] = true;
             this.gdata.state = state;
+            this.gdata.history = [];
             this.bc.postMessage({ op: "GAME_START" });
             this.data = this.gdata;
             this.bc.postMessage({ op: "SHOWING_CHOICES" });
             this.currentMoment = Game.selectOne(this.getAllPossibleEverything());
             if (this.currentMoment != null) {
-                await this.updateAsync(Op.START_BLURBING);
+                await this.startGameLoopAsync(Op.START_BLURBING);
             }
             else {
                 await this.refreshGameAndAlertAsync("AUCUN POINT DE DEPART POUR LE JEU");
-                await this.updateAsync(Op.BUILD_CHOICES);
+                await this.startGameLoopAsync(Op.BUILD_CHOICES);
             }
         };
-        this.continueExistingGameAsync = async () => {
+        this.resumeGameAsync = async () => {
             this.restoreContinueData();
             this.data = this.gdata;
             await this.ui.initSceneAsync(Game.parseScene(this.currentScene));
-            await this.updateAsync(this.currentMoment != null ? Op.START_BLURBING : Op.BUILD_CHOICES);
+            await this.startGameLoopAsync(this.currentMoment != null ? Op.START_BLURBING : Op.BUILD_CHOICES);
         };
-        this.updateAsync = async (op) => {
+        this.startGameLoopAsync = async (op) => {
             this.data = this.gdata;
+            log("startGameLoopAsync");
             while (true) {
                 if (op == Op.START_BLURBING && !this.started) {
                     if (this.currentMoment != null) {
@@ -178,7 +178,7 @@ export class Game {
         this.refreshGameAndAlertAsync = async (text) => {
             const json = await this.gdata.fetchGameFileAsync();
             if (json != undefined && json.length > 0)
-                this.gdata.load_Game(json);
+                this.gdata.parseGameFile(json);
             return this.ui.alertAsync(text);
         };
         this.getAllPossibleMoments = () => {
@@ -612,7 +612,7 @@ export class Game {
         this.sitWindows = new Array();
         this.gameWindows = new Array();
         this.started = false;
-        this.bc = new BroadcastChannel("game-loop");
+        this.bc = new BroadcastChannel("game-loop:");
     }
 }
 Game.selectOne = (moments) => {

@@ -30,7 +30,7 @@ export const fetch = async (args) => {
         const action = args[1];
         addGameCss(name);
         if (action == "restart") {
-            game === null || game === void 0 ? void 0 : game.clearAllGameData();
+            game === null || game === void 0 ? void 0 : game.eraseGame();
             storyStarted = false;
             router.goto(`#/story/${name}`, 1);
             router.reload(10);
@@ -57,8 +57,8 @@ export const postRender = () => {
         return;
     if (!storyStarted && game != undefined) {
         storyStarted = true;
-        setTimeout(game.startGameAsync, 0);
+        setTimeout(game.runGameAsync, 1);
     }
 };
-const bc2 = new BroadcastChannel("editor2");
+const bc2 = new BroadcastChannel("editor:reload-story");
 bc2.onmessage = event => setTimeout(() => { router.reload(); }, 0);

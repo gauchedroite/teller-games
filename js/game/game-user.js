@@ -9,7 +9,9 @@ export default class UserData {
         this.clearHistory = () => {
             this.localStorage_removeItem("history");
         };
-        this.clearContinueData = () => {
+        this.eraseAllUserStorage = () => {
+            this.localStorage_removeItem("state");
+            this.localStorage_removeItem("history");
             this.localStorage_removeItem("continueLocations");
             this.localStorage_removeItem("continueState");
         };

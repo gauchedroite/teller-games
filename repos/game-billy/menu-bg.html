@@ -14,6 +14,8 @@
         html, body {
             margin: 0;
             height: 100%;
+            /* background-color: lavender; */
+            background-image: linear-gradient(cornflowerblue, color-mix(in srgb, teal, transparent 30%));
         }
         .solid {
             position: absolute;
@@ -33,7 +35,7 @@
         #menu_title {
             position: absolute;
             width: 50vw;
-            margin-left: 50vw;
+            margin-left: 45vw;
             margin-top: 8vh;
             line-height: 1.1;
             color: color-mix(in srgb, lightskyblue, transparent 20%);
@@ -44,22 +46,30 @@
         }
         .wiggled {
             width: 99%;
-            /* animation: wiggle 6s infinite; */
+            animation: wiggle 4s;
         }
         @keyframes wiggle {
-            93% { transform: translate(1px, 1px) rotate(0deg); }
-            94% { transform: translate(1px, 11px) rotate(1deg); }
-            95% { transform: translate(-1px, 2px) rotate(-1deg); }
-            96% { transform: translate(-3px, 1px) rotate(0deg); }
-            97% { transform: translate(3px, 1px) rotate(-1deg); }
-            98% { transform: translate(-1px, -1px) rotate(1deg); }
-            99% { transform: translate(1px, 2px) rotate(0deg); }
+            86% { transform: translate(1px, 1px) rotate(0deg); }
+            88% { transform: translate(1px, 11px) rotate(1deg); }
+            90% { transform: translate(-1px, 2px) rotate(-1deg); }
+            92% { transform: translate(-3px, 1px) rotate(0deg); }
+            94% { transform: translate(3px, 1px) rotate(-1deg); }
+            96% { transform: translate(-1px, -1px) rotate(1deg); }
+            98% { transform: translate(1px, 2px) rotate(0deg); }
             100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        
+        #menu_canvas {
+            opacity: 0;
+            transition: opacity 3s 0.5s;
+        }
+        #menu_canvas.show {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
-    <audio id="menu_audio" loop name="media" class="solid">
+    <audio id="xmenu_audio" loop name="media" class="solid">
         <source src="./assets/choco-birds-run.mp3" type="audio/mpeg">
     </audio>
     <canvas id="menu_canvas" class="solid"></canvas>
@@ -246,16 +256,21 @@
             const fragmentShader = document.getElementById("fragment_shader").text
             const vertexShader = document.getElementById("vertex_shader").text
             runner.run(canvas, fragmentShader, vertexShader)
+            canvas.classList.add("show")
         }, 0);
 
         // Pause the shader if it's not visible
         // Start audio at beginning of the game
+        const logproxy = new BroadcastChannel("log-proxy")
         const bc = new BroadcastChannel("route-change")
         bc.onmessage = event => {
-            if (event.data.current.startsWith("#/menu"))
+            if (event.data.current.startsWith("#/menu")) {
                 runner?.resume()
+                logproxy.postMessage({ line: `resume-anim ${event.data.current} (${event.data.previous})`, id: performance.now()})
+            }
             else {
                 runner?.pause()
+                logproxy.postMessage({ line: `pause-anim ${event.data.current} (${event.data.previous})`, id: performance.now()})
                 document.getElementById("menu_audio")?.play()
             }
         }

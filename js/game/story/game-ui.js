@@ -92,9 +92,10 @@ export class UI {
                 lis[i].addEventListener("click", onChoice(i));
                 lis[i].classList.remove("hidden");
             }
-            const bc = new BroadcastChannel("editor");
+            const bc = new BroadcastChannel("editor:select-choice");
             bc.onmessage = event => indexClicked = event.data.choiceIndex;
             await waitforValueAsync(() => indexClicked);
+            bc.close();
             var li;
             for (var i = 0; i < lis.length; i++) {
                 lis[i].removeEventListener("click", onChoice(i));
