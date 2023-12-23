@@ -262,8 +262,9 @@
         // Pause the shader if it's not visible
         // Start audio at beginning of the game
         const logproxy = new BroadcastChannel("log-proxy")
-        const bc = new BroadcastChannel("route-change")
+        const bc = new BroadcastChannel("router:route-change")
         bc.onmessage = event => {
+            console.log(event.data.current, event.data.previous)
             if (event.data.current.startsWith("#/menu")) {
                 runner?.resume()
                 logproxy.postMessage({ line: `resume-anim ${event.data.current} (${event.data.previous})`, id: performance.now()})

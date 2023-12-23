@@ -2,17 +2,23 @@
 <html lang="fr-CA">
 <head>
     <meta charset="utf-8" />
+    <meta name="description" content="Jeux pour Laura, Auteur: Papi">
     <title>Teller!</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-
     <link rel="icon" href="teller-180x180.png">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Pour Laura!">
     <link rel="apple-touch-icon" sizes="180x180" href="teller-180x180.png">
+    <link rel="apple-touch-startup-image" sizes="2732x2048" href="bonjour-2732x2048.png" />
+
+    <link rel="manifest" href="manifest.json" />
 
     <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="lib/toastify.min.css" defer>
-    <link rel="stylesheet" href="all.min.css" defer>
+    <link rel="stylesheet" href="lib/toastify.min.css" defer async>
+    <link rel="stylesheet" href="all.min.css" defer async>
 </head>
 <body class="desktop">
     <div id="app_root">
@@ -41,5 +47,12 @@
     <script src="lib/toastify.min.js" defer></script>
     <script src="lib/broadcast-channel.js"></script>
     <script type="module" src="./js/index.js"></script>
+
+    <script src="service-worker.js"></script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("service-worker.js");
+        }
+    </script>
 </body>
 </html>

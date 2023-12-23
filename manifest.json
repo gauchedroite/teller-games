@@ -1,0 +1,13 @@
+{
+    "name": "Jeux pour Trésor!",
+    "short_name": "Trésor",
+    "start_url": "/",
+    "id": "/",
+    "icons": [
+        {
+            "src": "teller-180x180.png",
+            "sizes": "180x180"
+        }
+    ],
+    "display": "fullscreen"
+}
