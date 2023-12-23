@@ -2,45 +2,45 @@
 //
 // NOTE: THE SERVICE WORKER "fetch" EVENT WON'T FIRE UNLESS service-worker.js IS AT THE SAME LEVEL AS index.html
 //
-console.log("IN SERVICE-WORKER")
-const VERSION = "0.98";
+const VERSION = "0.9";
 const CACHE_NAME = `teller-${VERSION}`;
 const APP_STATIC_RESOURCES = [
     "/",
-    "/index.html",
-    "/manifest.json",
-    "/all.min.css",
-    "/service-worker.js",
-    "/css/index.css",
-    "/lib/morphdom-umd.js",
-    "/lib/fastclick.js",
-    "/lib/broadcast-channel.js",
-    "/teller-180x180.png",
-    "/js/index.js",
-    "/css/_reset.css",
-    "/css/preloaders.css",
-    "/css/editor.css",
-    "/lib/toastify.min.js",
-    "/lib/toastify.min.css",
-    "/js/core/app.js",
-    "/js/core/router.js",
-    "/js/game/main.js",
-    "/js/editor/main.js",
-    "/js/game/webgl-runner.js",
-    "/js/core/misc.js",
-    "/js/core/rootMan.js",
-    "/js/game/story/menu.js",
-    "/js/game/story/story.js",
-    "/js/editor/editor.js",
-    "/js/game/story/game-ui.js",
-    "/js/game/story/game-loop.js",
-    "/js/game/game-user.js",
-    "/js/game/igame-data.js",
-    "/js/game/game-data.js",
-    "/js/game/game-helper.js",
-    "/js/utils.js",
-    "/js/game/iui.js",
-    "/js/game/igame.js",
+    "/teller-games/",
+    "/teller-games/index.html",
+    "/teller-games/manifest.json",
+    "/teller-games/all.min.css",
+    "/teller-games/service-worker.js",
+    "/teller-games/css/index.css",
+    "/teller-games/lib/morphdom-umd.js",
+    "/teller-games/lib/fastclick.js",
+    "/teller-games/lib/broadcast-channel.js",
+    "/teller-games/teller-180x180.png",
+    "/teller-games/js/index.js",
+    "/teller-games/css/_reset.css",
+    "/teller-games/css/preloaders.css",
+    "/teller-games/css/editor.css",
+    "/teller-games/lib/toastify.min.js",
+    "/teller-games/lib/toastify.min.css",
+    "/teller-games/js/core/app.js",
+    "/teller-games/js/core/router.js",
+    "/teller-games/js/game/main.js",
+    "/teller-games/js/editor/main.js",
+    "/teller-games/js/game/webgl-runner.js",
+    "/teller-games/js/core/misc.js",
+    "/teller-games/js/core/rootMan.js",
+    "/teller-games/js/game/story/menu.js",
+    "/teller-games/js/game/story/story.js",
+    "/teller-games/js/editor/editor.js",
+    "/teller-games/js/game/story/game-ui.js",
+    "/teller-games/js/game/story/game-loop.js",
+    "/teller-games/js/game/game-user.js",
+    "/teller-games/js/game/igame-data.js",
+    "/teller-games/js/game/game-data.js",
+    "/teller-games/js/game/game-helper.js",
+    "/teller-games/js/utils.js",
+    "/teller-games/js/game/iui.js",
+    "/teller-games/js/game/igame.js",
 ];
 // On install, cache the static resources
 self.addEventListener("install", (event) => {
@@ -71,7 +71,7 @@ self.addEventListener("fetch", (event) => {
     console.log("fetch", event.request.url);
     // When seeking an HTML page, return to index.html
     if (event.request.mode === "navigate") {
-        event.respondWith(caches.match("/"));
+        event.respondWith(caches.match("/teller-games/"));
         return;
     }
     // Return the cached response if it's available.
