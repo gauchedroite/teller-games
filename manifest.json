@@ -1,7 +1,7 @@
 {
     "name": "Jeux pour Trésor!",
     "short_name": "Trésor",
-    "start_url": "/",
+    "start_url": "/teller-games",
     "id": "/",
     "icons": [
         {
